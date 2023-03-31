@@ -1,7 +1,7 @@
 PUBLIC unsigned_hex
 
 EXTRN scan_menu_number: near
-EXTRN read_unsigned_hex: near
+EXTRN update_unsigned_hex: near
 EXTRN print_newline: near
 EXTRN print_unsigned_hex: near
 EXTRN print_unsigned_bin: near
@@ -20,7 +20,7 @@ DATASEG SEGMENT PARA PUBLIC 'DATA'
 	
 	unsigned_hex DB 2 DUP(?)
 	
-	jumptable DW exit, read_unsigned_hex, print_unsigned_bin, print_signed_dec, print_unsigned_hex
+	jumptable DW exit, update_unsigned_hex, print_unsigned_bin, print_signed_dec
 DATASEG ENDS
 
 CODESEG SEGMENT para public 'CODE'
@@ -32,6 +32,8 @@ main:
 	
 menu_loop:
 	; PRINT MENU PROMPT
+	call print_unsigned_hex
+	
 	mov dx, offset menu_prompt
 	mov ah, 09h
 	int 21h

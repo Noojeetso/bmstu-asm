@@ -1,8 +1,9 @@
 PUBLIC scan_menu_number
-PUBLIC read_unsigned_hex
+PUBLIC update_unsigned_hex
 
 EXTRN print_newline: near
 EXTRN print_space: near
+EXTRN fill_hex_string_buffer: near
 
 EXTRN unsigned_hex: byte
 
@@ -40,7 +41,7 @@ scan_menu_number proc near
 	
 	cmp bl, '0'
 	jl input_error
-	cmp bl, '4'
+	cmp bl, '3'
 	jg input_error
 	
 	call print_newline
@@ -117,7 +118,7 @@ hex_upper_char:
 scan_hex_digit endp
 
 
-read_unsigned_hex proc near
+update_unsigned_hex proc near
 	; LINK DS WITH DATA SEGMENT
 	mov ax, DATASEG
 	mov ds, ax
@@ -155,6 +156,8 @@ add_next_digit:
 	
 	call print_newline
 	
+	call fill_hex_string_buffer
+	
 	mov ax, 0
 	ret
 	
@@ -167,7 +170,7 @@ input_error:
 	
 	mov ax, 1
 	ret
-read_unsigned_hex endp
+update_unsigned_hex endp
 
 
 CODESEG ENDS

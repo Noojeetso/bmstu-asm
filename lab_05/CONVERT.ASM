@@ -1,7 +1,9 @@
+PUBLIC fill_hex_string_buffer
 PUBLIC fill_binary_string_buffer
 PUBLIC fill_decimal_string_buffer
 
 EXTRN unsigned_hex: byte
+EXTRN hexadecimal_string: byte
 EXTRN binary_string: byte
 EXTRN decimal_string: byte
 
@@ -16,6 +18,50 @@ DATASEG ENDS
 
 CODESEG SEGMENT para public 'CODE'
 	ASSUME CS:CODESEG, DS:DATASEG
+
+
+fill_hex_string_buffer proc near
+	; LINK DS WITH DATA SEGMENT
+	mov ax, DATASEG
+	mov ds, ax
+	
+	mov cx, 4
+	
+print_unsigned_hex_digit:
+	mov iterations_left, cx
+	mov si, cx
+	
+	dec si
+	shr si, 1
+	mov dl, unsigned_hex[si]
+	
+	; CHECK IF IT'S LOW BYTE
+	test cx, 1
+	mov cl, 4  ; PREPARE FOR THE BYTE SHIFTING
+	jz byte_to_hex
+	; MULTIPLY NUMBER BY 16 (HIGH BYTES NOW ZERO)
+	shl dl, cl
+	
+byte_to_hex:
+	; DIVIDE NUMBER BY 16 (FOR BOTH HIGH AND LOW BYTES CONVERSIIONS)
+	shr dl, cl
+	cmp dl, 9
+	jg extended_hex_digit
+	add dl, '0'
+	jmp end_unsigned_hex_digit_conversion
+extended_hex_digit:
+	sub dl, 10
+	add dl, 'A'
+end_unsigned_hex_digit_conversion:
+	mov si, 4
+	sub si, iterations_left
+	mov hexadecimal_string[si], dl
+	
+	mov cx, iterations_left
+	loop print_unsigned_hex_digit																																																															
+	
+	ret
+fill_hex_string_buffer endp
 
 
 fill_binary_byte proc near
@@ -46,7 +92,7 @@ fill_binary_string_buffer proc near
 	mov ds, ax
 	
 	; CLEAR STRING BUFFER
-	mov cx, 17
+	mov cx, 20
 dec_clear_loop:
 	mov si, cx
 	dec si

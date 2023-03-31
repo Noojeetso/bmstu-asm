@@ -3,19 +3,22 @@ PUBLIC print_unsigned_hex
 PUBLIC print_unsigned_bin
 PUBLIC print_signed_dec
 
+PUBLIC hexadecimal_string
 PUBLIC binary_string
 PUBLIC decimal_string
 
+EXTRN fill_hex_string_buffer: near
 EXTRN fill_binary_string_buffer: near
 EXTRN fill_decimal_string_buffer: near
 
 EXTRN unsigned_hex: byte
 
 DATASEG SEGMENT PARA PUBLIC 'DATA'
-	hex_number_output_prompt DB 'Output hex number: $'  ; DEPRECATED
+	hex_number_output_prompt DB 'Current unsigned hexadecimal number: $'
 	binary_number_output_prompt DB 'Output binary number: $'
 	decimal_number_output_prompt DB 'Output decimal number: $'
-	binary_string DB 17 DUP('$')
+	hexadecimal_string DB 5 DUP('$')
+	binary_string DB 20 DUP('$')
 	decimal_string DB 7 DUP('$')
 	iterations_left DW 0
 DATASEG ENDS
@@ -45,7 +48,7 @@ print_space proc near
 	ret
 print_space endp
 
-; DEPRECATED
+
 print_unsigned_hex proc near
 	; LINK DS WITH DATA SEGMENT
 	mov ax, DATASEG
@@ -55,39 +58,11 @@ print_unsigned_hex proc near
 	mov ah, 09h
 	int 21h
 	
-	mov cx, 4
+	call fill_hex_string_buffer
 	
-print_unsigned_hex_digit:
-	mov iterations_left, cx
-	mov si, cx
-	
-	dec si
-	shr si, 1
-	mov dl, unsigned_hex[si]
-	
-	; check if it's low byte
-	test cx, 1
-	mov cl, 4  ; preparing for the byte shifting
-	jz byte_to_hex
-	; multiply number by 16 (zero high bytes)
-	shl dl, cl
-	
-byte_to_hex:
-	; divide number by 16 (for both high and low byte conversions)
-	shr dl, cl
-	cmp dl, 9
-	jg extended_hex_digit
-	add dl, '0'
-	jmp end_unsigned_hex_digit_conversion
-extended_hex_digit:
-	sub dl, 10
-	add dl, 'A'
-end_unsigned_hex_digit_conversion:
-	mov ah, 02h
+	mov ah, 09h
+	mov dx, offset hexadecimal_string
 	int 21h
-	
-	mov cx, iterations_left
-	loop print_unsigned_hex_digit
 	
 	call print_newline
 	
