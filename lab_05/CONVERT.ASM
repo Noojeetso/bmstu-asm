@@ -80,7 +80,8 @@ leave_zero:
 	
 	loop print_bin_digit
 	
-	; call print_space
+	mov binary_string[di], ' '
+	inc di
 	
 	ret
 fill_binary_byte endp
