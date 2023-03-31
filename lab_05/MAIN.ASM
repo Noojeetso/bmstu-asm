@@ -12,7 +12,7 @@ STACKSEG SEGMENT PARA STACK 'STACK'
 STACKSEG ENDS
 
 DATASEG SEGMENT PARA PUBLIC 'DATA'
-	menu_prompt DB 'Menu:', 13, 10  ; '
+	menu_prompt DB 'Menu:' , 13, 10  ; '
 	DB '1. Input unsigned hexadecimal number', 13, 10
 	DB '2. Print unsigned binary number', 13, 10
 	DB '3. Print signed decimal number', 13, 10
@@ -29,11 +29,9 @@ main:
 	; LINK DS WITH DATA SEGMENT
 	mov ax, DATASEG
 	mov ds, ax
-	
+	call update_unsigned_hex
 menu_loop:
-	; PRINT MENU PROMPT
-	call print_unsigned_hex
-	
+	; PRINT MENU PROMPT	
 	mov dx, offset menu_prompt
 	mov ah, 09h
 	int 21h

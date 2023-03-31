@@ -18,7 +18,7 @@ DATASEG SEGMENT PARA PUBLIC 'DATA'
 	binary_number_output_prompt DB 'Output binary number: $'
 	decimal_number_output_prompt DB 'Output decimal number: $'
 	hexadecimal_string DB 5 DUP('$')
-	binary_string DB 20 DUP('$')
+	binary_string DB 21 DUP('$')
 	decimal_string DB 7 DUP('$')
 	iterations_left DW 0
 DATASEG ENDS
@@ -54,12 +54,14 @@ print_unsigned_hex proc near
 	mov ax, DATASEG
 	mov ds, ax
 	
+	; PRINT OUTPUT PROMPT
 	mov dx, offset hex_number_output_prompt
 	mov ah, 09h
 	int 21h
 	
 	call fill_hex_string_buffer
 	
+	; PRINT CONVERTED NUMBER
 	mov ah, 09h
 	mov dx, offset hexadecimal_string
 	int 21h
@@ -75,12 +77,14 @@ print_unsigned_bin proc near
 	mov ax, DATASEG
 	mov ds, ax
 	
+	; PRINT OUTPUT PROMPT
 	mov dx, offset binary_number_output_prompt
 	mov ah, 09h
 	int 21h
 	
 	call fill_binary_string_buffer
 	
+	; PRINT CONVERTED NUMBER
 	mov ah, 09h
 	mov dx, offset binary_string
 	int 21h
@@ -96,13 +100,14 @@ print_signed_dec proc near
 	mov ax, DATASEG
 	mov ds, ax
 	
-	; PRINT PROMPT
+	; PRINT OUTPUT PROMPT
 	mov dx, offset decimal_number_output_prompt
 	mov ah, 09h
 	int 21h
 	
 	call fill_decimal_string_buffer
 	
+	; PRINT CONVERTED NUMBER
 	mov ah, 09h
 	mov dx, offset decimal_string
 	int 21h

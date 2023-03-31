@@ -71,7 +71,7 @@ scan_menu_number endp
 scan_hex_digit proc near
 	mov ah, 01h
 	int 21h
-	;sub al, '0'
+	
 	mov current_digit, al
 
 	mov al, current_digit
@@ -141,7 +141,7 @@ read_number:
 	xor ax, ax
 	mov al, current_digit
 	
-	; multiply by 4 if it's high byte
+	; MULTIPLY BY 16 IF IT'S HIGH SYMBOL IN BYTE
 	test cx, 1
 	jnz add_next_digit
 	mov cl, 4

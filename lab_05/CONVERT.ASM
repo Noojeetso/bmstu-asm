@@ -35,7 +35,7 @@ print_unsigned_hex_digit:
 	shr si, 1
 	mov dl, unsigned_hex[si]
 	
-	; CHECK IF IT'S LOW BYTE
+	; CHECK IF IT'S LOW SYMBOL IN BYTE
 	test cx, 1
 	mov cl, 4  ; PREPARE FOR THE BYTE SHIFTING
 	jz byte_to_hex
@@ -93,7 +93,7 @@ fill_binary_string_buffer proc near
 	mov ds, ax
 	
 	; CLEAR STRING BUFFER
-	mov cx, 20
+	mov cx, 21
 dec_clear_loop:
 	mov si, cx
 	dec si
@@ -113,13 +113,13 @@ fill_binary_byte_loop:
 	mov bl, unsigned_hex[si]
 	
 	test cx, 1
-	mov cl, 4  ; preparing for the byte shifting
+	mov cl, 4  ; PREPARE FOR THE BYTE SHIFTING
 	jz byte_to_string
-	; multiply number by 16 (zero high bytes)
+	; MULTIPLY NUMBER BY 16 (HIGH BYTES NOW ZERO)
 	shl bl, cl
 	
 byte_to_string:
-	; divide number by 16 (for both high and low byte conversions)
+	; DIVIDE NUMBER BY 16 (FOR BOTH HIGH AND LOW BYTES CONVERSIIONS)
 	shr bl, cl
 	
 	call fill_binary_byte
