@@ -29,9 +29,9 @@ main:
 	; LINK DS WITH DATA SEGMENT
 	mov ax, DATASEG
 	mov ds, ax
-	call update_unsigned_hex
 menu_loop:
-	; PRINT MENU PROMPT	
+	call print_unsigned_hex
+	; PRINT MENU PROMPT
 	mov dx, offset menu_prompt
 	mov ah, 09h
 	int 21h
