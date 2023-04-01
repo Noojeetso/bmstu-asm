@@ -18,8 +18,8 @@ DATASEG SEGMENT PARA PUBLIC 'DATA'
 	binary_number_output_prompt DB 'Output binary number: $'
 	decimal_number_output_prompt DB 'Output decimal number: $'
 	hexadecimal_string DB 5 DUP('$')
-	binary_string DB 21 DUP('$')
-	decimal_string DB 7 DUP('$')
+	binary_string DB 21 DUP('$')  ; 21 CHARS IN BUFFER (16 BIN DIGITS + 4 SPACES + EOL SYMBOL)
+	decimal_string DB 7 DUP('$')  ; 4 HEX DIGITS CAN REPRESENT AT MAX 5 DECIMAL DIGITS + SIGN + EOL SYMBOL
 	iterations_left DW 0
 DATASEG ENDS
 
@@ -59,6 +59,7 @@ print_unsigned_hex proc near
 	mov ah, 09h
 	int 21h
 	
+	; UPDATE HEX STRING BUFFER
 	call fill_hex_string_buffer
 	
 	; PRINT CONVERTED NUMBER
@@ -82,6 +83,7 @@ print_unsigned_bin proc near
 	mov ah, 09h
 	int 21h
 	
+	; UPDATE BINARY STRING BUFFER
 	call fill_binary_string_buffer
 	
 	; PRINT CONVERTED NUMBER
@@ -105,6 +107,7 @@ print_signed_dec proc near
 	mov ah, 09h
 	int 21h
 	
+	; UPDATE DECIMAL STRING BUFFER
 	call fill_decimal_string_buffer
 	
 	; PRINT CONVERTED NUMBER

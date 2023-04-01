@@ -30,6 +30,7 @@ main:
 	mov ax, DATASEG
 	mov ds, ax
 menu_loop:
+	; PRINT INFO ABOUT CURRENT HEX NUMBER
 	call print_unsigned_hex
 	; PRINT MENU PROMPT
 	mov dx, offset menu_prompt
@@ -46,11 +47,12 @@ menu_loop:
 	call jumptable[si]
 	
 	call print_newline
-	jmp menu_loop
+	
+	jmp menu_loop  ; JUMP TO START UNTIL EXIT FUNCTION IS CALLED
 
 
 exit proc near
-	mov ah, 'L'
+	mov ah, 'L'  ; 'L' is for Leave the program
 	int 21h
 exit endp
 
